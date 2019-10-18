@@ -1,0 +1,8 @@
+Xdelta3 Tutorial: 
+https://subarashii-no-fansub.github.io/Subbing-Tutorial/Making-Patches-xdelta/
+
+Xdelta3 GitHub:
+https://github.com/jmacd/xdelta/blob/wiki/CommandLineSyntax.md
+
+Argparse Tutorial:
+https://docs.python.org/2/howto/argparse.html
