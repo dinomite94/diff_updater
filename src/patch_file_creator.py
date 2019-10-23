@@ -25,14 +25,19 @@ def copy_new_files_into_patch_directory(from_path, to_path, file_list):
 
 
 def create_diff_files(file_list, original_version_path, modified_version_path, patch_path, diff_tool):
+    files_with_failed_patches = []
+
     for file in file_list:
         print("Creating diff for {}".format(file[0]))
         original_version_file = original_version_path + "/" + file[1] + "/" + file[0]
         modified_version_file = modified_version_path + "/" + file[1] + "/" + file[0]
         patch_file = patch_path + "/" + file[1] + "/" + file[0]
-        
+
         if diff_tool == "bsdiff":
-            subprocess.call(["bsdiff", original_version_file, modified_version_file, patch_file])
+            result = subprocess.call(["bsdiff", original_version_file, modified_version_file, patch_file])
+            if result > 0:
+                print("Patch for {} failed. Adding this file to the list!".format(file[0]))
+                files_with_failed_patches.append(file)
         elif diff_tool == "xdelta":
             pass
         elif diff_tool == "diff":
@@ -41,6 +46,9 @@ def create_diff_files(file_list, original_version_path, modified_version_path, p
             pass
         else:
             pass
+
+    return files_with_failed_patches
+
 
 def is_path_valid(path_to_check):
     if os.path.exists(path_to_check):
@@ -59,6 +67,8 @@ def detect_all_new_and_modified_files(original_version_file_list, modified_versi
         modified_file_name = modified_file[0]
         modified_file_path = modified_file[1]
 
+        found_equal_file = False
+
         for original_file in original_version_file_list:
             original_file_name = original_file[0]
             original_file_path = original_file[1]
@@ -66,9 +76,11 @@ def detect_all_new_and_modified_files(original_version_file_list, modified_versi
             if original_file_name == modified_file_name:
                 if original_file_path == modified_file_path:
                     modified_files.append(modified_file)
-                else:
-                    new_files.append(modified_file)
-                break
+                    found_equal_file = True
+                    break
+
+        if not found_equal_file:
+            new_files.append(modified_file)
 
     return modified_files, new_files
 
@@ -88,6 +100,7 @@ def check_arguments():
     #TODO: Add -f flag for single file diffing. Currently, the program will only execute correctly for directories!
     #TODO: Make the program work for archives 
     #TODO: Add -j flag for name of json-file 
+    #TODO: Add -c flag for compression of directories
     parser = argparse.ArgumentParser()
     parser.add_argument("-o", "--original_version_path", 
                         help="This path contains the original version of the directory/file/archive")
@@ -122,14 +135,12 @@ if __name__ == "__main__":
     #         Note: Files with their corresponding paths will be saved
     print("Starting to iterate through the original version!")
     original_version_file_list = iterate_through_directory(directory_path=original_version_path)
-    print("Result: ")
-    print(original_version_file_list)
+    print("Number of files within the original version: {}".format(len(original_version_file_list)))
     print("=======================================================================")
 
     print("Starting to iterate through the modified version!")
     modified_version_file_list = iterate_through_directory(directory_path=modified_version_path)
-    print("Result: ")
-    print(modified_version_file_list)
+    print("Number of files within the original version: {}".format(len(modified_version_file_list)))
     print("=======================================================================")
 
     # Step 3: Create structure of the patch-directory
@@ -150,13 +161,18 @@ if __name__ == "__main__":
 
     print("Creating diff-files for all modified files!")
     start_time = time.time()
-    create_diff_files(file_list=modified_files, original_version_path=original_version_path,
+    files_with_failed_patches = create_diff_files(file_list=modified_files, original_version_path=original_version_path,
                       modified_version_path=modified_version_path, patch_path=patch_path, diff_tool=diff_tool)
     end_time = time.time()
     print("All diff-files were created and stored within the patch directory!")
     # Calculates time which was needed to create all diff-files
     needed_time = end_time - start_time
     print("Time needed to create all diff-files: {}".format(needed_time))
+
+    print("Number of files where the patching process failed: {}".format(len(files_with_failed_patches)))
+    print("Files with a failed patching process need to be copied completely into the patch directory!")
+    for file in files_with_failed_patches:
+        new_files.append(file)
 
     # Step 5: Move all new files into their corresponding
     #           location within the patch-directory
