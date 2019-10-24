@@ -10,6 +10,38 @@ import re
 supported_tools = ["diff", "bsdiff", "xdelta", "rsync"]
 
 
+def calculate_directory_size(dir_path):
+    size = 0
+    for root, dir, files in os.walk(dir_path):
+        for file in files:
+            size += os.path.getsize(root + "/" + file)
+
+    return size
+
+
+def retrieve_needed_information(original_version_path, modified_version_path, patch_path):
+    original_version_size = 0
+    modified_version_size = 0
+    patch_version_size = 0
+    compressed_version_size = 0
+
+    # Step 1: Get original_version_size
+    original_version_size = calculate_directory_size(original_version_path)
+
+    # Step 2: Get modified_version_size
+    modified_version_size = calculate_directory_size(modified_version_path)
+
+    # Step 3: Get patch_version_size
+    patch_version_size = calculate_directory_size(patch_path)
+
+    # Step 4: Get compressed_version_size
+
+    # Step 5: Compare modified version size with patch version size
+    modified_version_vs_patch_version = "{} / {} = {}".format(modified_version_size, patch_version_size, (modified_version_size/patch_version_size))
+
+    return original_version_size, modified_version_size, patch_version_size, compressed_version_size, modified_version_vs_patch_version
+
+
 def create_patch_directory_structure(modified_directory, patch_directory):
     for root, dirs, _ in os.walk(modified_directory):
         root = root.replace(modified_directory, "")
@@ -97,19 +129,34 @@ def iterate_through_directory(directory_path):
 
 
 def check_arguments():
-    #TODO: Add -f flag for single file diffing. Currently, the program will only execute correctly for directories!
-    #TODO: Make the program work for archives 
-    #TODO: Add -j flag for name of json-file 
-    #TODO: Add -c flag for compression of directories
     parser = argparse.ArgumentParser()
-    parser.add_argument("-o", "--original_version_path", 
+
+    # Required Arguments
+    parser.add_argument("-o", "--original_version_path", required=True, 
                         help="This path contains the original version of the directory/file/archive")
-    parser.add_argument("-m", "--modified_version_path", 
+    parser.add_argument("-m", "--modified_version_path", required=True, 
                         help="This path contains the modified version of the directory/file/archive")
-    parser.add_argument("-p", "--patch_path", 
+    parser.add_argument("-p", "--patch_path", required=True, 
                         help="The created diff file will be saved within this path")
+
+    # Optional Arguments
     parser.add_argument("-t", "--tool", 
-                        help="Choose one of the supported differential update tools listed below")
+                        help="Choose one of the supported differential update tools listed below",
+                        default="bsdiff")
+
+    # Currently not implemented Arguments
+    #TODO: Implement behavior for single file patching
+    #TODO: Implement behavior for compressing the created patch-file/patch-directory
+    #TODO: Implement behavior for choosing a specific JSON-file-directory
+    parser.add_argument("-f", "--file_path",
+                        help="Filepath and filename in order to create the patch file for a certain file", 
+                        default=None)
+    parser.add_argument("-c", "--compress",
+                        help="Compresses the created patch directory. Default compression is ZIP",
+                        default="zip")
+    parser.add_argument("-j", "--json_path", 
+                        help="Chosen path where the JSON-file will be saved. Default location will be the desktop!",
+                        default="~/Desktop/")
     args = parser.parse_args()
 
     if not is_path_valid(args.original_version_path):
@@ -140,7 +187,7 @@ if __name__ == "__main__":
 
     print("Starting to iterate through the modified version!")
     modified_version_file_list = iterate_through_directory(directory_path=modified_version_path)
-    print("Number of files within the original version: {}".format(len(modified_version_file_list)))
+    print("Number of files within the modified version: {}".format(len(modified_version_file_list)))
     print("=======================================================================")
 
     # Step 3: Create structure of the patch-directory
@@ -180,17 +227,30 @@ if __name__ == "__main__":
     copy_new_files_into_patch_directory(from_path=modified_version_path, to_path=patch_path, file_list=new_files)
     print("Finished copying process!")
 
+    # Step 6: Retrieve the following details which are necessary for the JSON-file:
+    #           - Size of the original version
+    #           - Size of the modified version
+    #           - Size of the patch version
+    #           - Size of the compressed version
+    #           - Original version size vs. patch size
+
+    original_version_size, modified_version_size, \
+    patch_version_size, compressed_version_size, \
+    original_vs_patch_size = retrieve_needed_information(original_version_path=original_version_path, 
+                                                         modified_version_path=modified_version_path,
+                                                         patch_path=patch_path)
+
     # Step 6: Create JSON file and save all measurable stats within it
     print("Saving JSON-file with all relevant information as: stats.json")
 
     stats = {
-        "time_needed_to_create_patch_file": needed_time,
+        "time_needed_to_create_patch_file": "{} seconds".format(int(needed_time)),
         "time_needed_to_apply_patch_file": "",
-        "size_of_the_original_version": "",
-        "size_of_the_modified_version": "",
-        "size_of_the_patch_version": "",
-        "size_of_the_compressed_version": "",
-        "original_size_vs_patch_size": ""
+        "size_of_the_original_version": "{} bytes".format(original_version_size),
+        "size_of_the_modified_version": "{} bytes".format(modified_version_size),
+        "size_of_the_patch_version": "{} bytes".format(patch_version_size),
+        "size_of_the_compressed_version": "{} bytes".format(compressed_version_size),
+        "original_size_vs_patch_size": "{}".format(original_vs_patch_size)
     }
 
     with open("/home/dino/Desktop/stats.json", "w") as file_handler:
