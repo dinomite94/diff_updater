@@ -1,13 +1,34 @@
 import argparse
-import os
 import json
+import os
+import re
 import shutil
 import subprocess
 import time
-import re
+
 
 
 supported_tools = ["diff", "bsdiff", "xdelta", "rsync"]
+
+
+def save_new_modified_and_deleted_file_lists(new_files, modified_files, deleted_files, patch_path):
+    new_files_path = patch_path + "/" + "new_files.txt"
+    modified_files_path = patch_path + "/" + "modified_files.txt"
+    deleted_files_path = patch_path + "/" + "deleted_files.txt"
+    with open(new_files_path, "w") as file_handler:
+        for file in new_files:
+            row = file[0] + " | " + file[1] + "\n"
+            file_handler.write(row)
+
+    with open(modified_files_path, "w") as file_handler:
+        for file in modified_files:
+            row = file[0] + " | " + file[1] + "\n"
+            file_handler.write(row)
+
+    with open(deleted_files_path, "w") as file_handler:
+        for file in deleted_files:
+            row = file[0] + " | " + file[1] + "\n"
+            file_handler.write(row)
 
 
 def calculate_directory_size(dir_path):
@@ -53,7 +74,9 @@ def create_patch_directory_structure(modified_directory, patch_directory):
 
 def copy_new_files_into_patch_directory(from_path, to_path, file_list):
     for file in file_list:
-        shutil.copy(from_path + file[1] + file[0], to_path + file[1] + file[0])
+        source_path = from_path + "/" + file[1] + "/" + file[0]
+        destination_path = to_path + "/" + file[1] + "/" + file[0]
+        shutil.copy(src=source_path, dst=destination_path)
 
 
 def create_diff_files(file_list, original_version_path, modified_version_path, patch_path, diff_tool):
@@ -91,9 +114,10 @@ def is_path_valid(path_to_check):
         return False
 
 
-def detect_all_new_and_modified_files(original_version_file_list, modified_version_file_list):
+def detect_all_new_modified_and_deleted_files(original_version_file_list, modified_version_file_list):
     new_files = []
     modified_files = []
+    deleted_files = []
 
     for modified_file in modified_version_file_list:
         modified_file_name = modified_file[0]
@@ -114,7 +138,24 @@ def detect_all_new_and_modified_files(original_version_file_list, modified_versi
         if not found_equal_file:
             new_files.append(modified_file)
 
-    return modified_files, new_files
+    for original_file in original_version_file_list:
+        original_file_name = original_file[0]
+        original_file_path = original_file[1]
+
+        found = False
+
+        for modified_file in modified_version_file_list:
+            modified_file_name = modified_file[0]
+            modified_file_path = modified_file[1]
+
+            if modified_file_name == original_file_name:
+                if modified_file_path == original_file_path:
+                    found = True
+                    break
+        if not found:
+            deleted_files.append(original_file)
+
+    return modified_files, new_files, deleted_files
 
 
 def iterate_through_directory(directory_path):
@@ -156,7 +197,7 @@ def check_arguments():
                         default="zip")
     parser.add_argument("-j", "--json_path", 
                         help="Chosen path where the JSON-file will be saved. Default location will be the desktop!",
-                        default="~/Desktop/")
+                        default=os.environ["HOME"] + "/Desktop/stats.json")
     args = parser.parse_args()
 
     if not is_path_valid(args.original_version_path):
@@ -169,13 +210,13 @@ def check_arguments():
     else:
         print("{} was chosen as the differential update tool for processing!".format(args.tool))
 
-    return args.original_version_path, args.modified_version_path, args.patch_path, args.tool
+    return args.original_version_path, args.modified_version_path, args.patch_path, args.tool, args.json_path
 
 
 if __name__ == "__main__":
     # Step 1: Check if all paths and arguments are valid
     print("Checking if the paths of the original and modified versions are valid and exist!")
-    original_version_path, modified_version_path, patch_path, diff_tool = check_arguments()
+    original_version_path, modified_version_path, patch_path, diff_tool, json_path = check_arguments()
     print("All needed paths are valid and exist. Processing continues")
 
     # Step 2: Iterate through the original and modified directories and search for all differences
@@ -200,16 +241,20 @@ if __name__ == "__main__":
     #         Note: This time it is necessary to measure the time which is needed 
     #               to create the diff for all files
     print("Starting to detect all new and modified files!")
-    modified_files, new_files = detect_all_new_and_modified_files(original_version_file_list=original_version_file_list, 
-                                                                  modified_version_file_list=modified_version_file_list)
+    modified_files, new_files, deleted_files = detect_all_new_modified_and_deleted_files(original_version_file_list=original_version_file_list,
+                                                                                         modified_version_file_list=modified_version_file_list)
 
     print("Number of files which were added within the modified version: {}".format(len(new_files)))
     print("Number of files which were modified within the modified version: {}".format(len(modified_files)))
+    print("Number of files which were deleted within the modified version: {}".format(len(deleted_files)))
 
     print("Creating diff-files for all modified files!")
     start_time = time.time()
-    files_with_failed_patches = create_diff_files(file_list=modified_files, original_version_path=original_version_path,
-                      modified_version_path=modified_version_path, patch_path=patch_path, diff_tool=diff_tool)
+    files_with_failed_patches = create_diff_files(file_list=modified_files, 
+                                                  original_version_path=original_version_path,
+                                                  modified_version_path=modified_version_path,
+                                                  patch_path=patch_path,
+                                                  diff_tool=diff_tool)
     end_time = time.time()
     print("All diff-files were created and stored within the patch directory!")
     # Calculates time which was needed to create all diff-files
@@ -220,11 +265,16 @@ if __name__ == "__main__":
     print("Files with a failed patching process need to be copied completely into the patch directory!")
     for file in files_with_failed_patches:
         new_files.append(file)
+        if file in modified_files:
+            print("Removing {} out of the modified_files list!".format(file))
+            modified_files.remove(file)
 
     # Step 5: Move all new files into their corresponding
     #           location within the patch-directory
     print("Copying all new files from the modified version into the patch directory!")
-    copy_new_files_into_patch_directory(from_path=modified_version_path, to_path=patch_path, file_list=new_files)
+    copy_new_files_into_patch_directory(from_path=modified_version_path,
+                                        to_path=patch_path,
+                                        file_list=new_files)
     print("Finished copying process!")
 
     # Step 6: Retrieve the following details which are necessary for the JSON-file:
@@ -253,8 +303,16 @@ if __name__ == "__main__":
         "original_size_vs_patch_size": "{}".format(original_vs_patch_size)
     }
 
-    with open("/home/dino/Desktop/stats.json", "w") as file_handler:
+    with open(json_path, "w") as file_handler:
         json.dump(stats, file_handler, indent=4, sort_keys=True, ensure_ascii=True)
 
     print("JSON-file successfully saved!")
+
+    # Step 7: Create files which list all modified, new and deleted files
+    print("Creating files which contain information about all new files, all modified files and all deleted files")
+    save_new_modified_and_deleted_file_lists(new_files=new_files, 
+                                             modified_files=modified_files,
+                                             deleted_files=deleted_files,
+                                             patch_path=patch_path)
+    print("Successfully created all file lists!")
     print("Finished processing!")
