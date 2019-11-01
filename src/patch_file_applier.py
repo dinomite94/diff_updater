@@ -7,31 +7,7 @@ import shutil
 import subprocess
 
 supported_tools = ["bspatch", "diff", "xdelta", "rsync"]
-#TODO: Fix problem which is described below
-'''
-    Currently there are problems while patching the old version.
-    The patch_file_applier script is going through each file of the
-    patch_file_version and starts a subprocess which executes the bspatch
-    task. This will work for more than 85% of the files within this directory,
-    besides the ones which were directly copies. That means the patch directory
-    consists of patch files and of copied files which are either new, or the
-    diff file creation failed. 
 
-    In order to solve this task, it is necessary to track which file was new,
-    which one was modified and which one was deleted.
-
-    Currently, this script would update all existing files. There are two 
-    essential features missing within this script:
-        1. Removing all files which are also deleted within the modified version
-        2. Moving of all new files into the old version
-
-    When starting this script, all files which contain information about new, 
-    modified and deleted files will be read and this information will be stored
-    within lists! 
-
-    Afterwards, these files can be deleted out of the patch directory!
-
-'''
 
 def is_path_valid(path_to_check):
     if os.path.exists(path_to_check):
@@ -63,7 +39,7 @@ def check_arguments():
     #TODO: Implement behavior for compressing the created patch-file/patch-directory
     #TODO: Implement behavior for choosing a specific JSON-file-directory
     parser.add_argument("-f", "--file_path",
-                        help="Filepath and filename in order to create the patch file for a certain file", 
+                        help="Filepath and filename in order to create the patch file for a specific file", 
                         default=None)
     parser.add_argument("-c", "--compress",
                         help="Compresses the created patch directory. Default compression is ZIP",
