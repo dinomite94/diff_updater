@@ -5,7 +5,6 @@ import re
 import shutil
 import subprocess
 import time
-import zipfile
 
 
 supported_tools = ["diff", "bsdiff", "xdelta", "rsync"]
@@ -274,8 +273,8 @@ if __name__ == "__main__":
         print("Retrieving all relevant information of the selected files!")
         original_version_size = os.path.getsize(original_version_path)
         modified_version_size = os.path.getsize(modified_version_path)
-        modified_vs_patch_size = "{} / {} = {}".format(modified_version_size, patch_version_size, modified_version_size / patch_version_size)
         patch_version_size = os.path.getsize(patch_path)
+        modified_vs_patch_size = "{} / {} = {}".format(modified_version_size, patch_version_size, modified_version_size / patch_version_size)
         print("Successfully gathered all needed information.")
     else:
         # Step 2: Iterate through the original and modified directories and search for all differences
@@ -359,13 +358,23 @@ if __name__ == "__main__":
 
     compressed_version_size = 0
     if compression:
-        zip_file = zipfile.ZipFile("/home/dino/Desktop/patch_result.zip", "w", zipfile.ZIP_DEFLATED)
+        if single_file_patching:
+            path_parts = patch_path.split("/")
+            filename = path_parts[-1]
 
-        for root, dirs, files in os.walk(patch_path):
-            for file in files:
-                zip_file.write(os.path.join(root, file))
+            path_parts = path_parts[:-1]
+            path_without_filename = ""
+            for part in path_parts:
+                path_without_filename += part + "/"
 
-        compressed_version_size = os.path.getsize("/home/dino/Desktop/patch_result.zip")
+            shutil.make_archive(patch_path, 'zip', path_without_filename)
+            compressed_version_size = os.path.getsize(path_without_filename + "/" + filename + ".zip")
+        else:
+            if patch_path[-1] == "/":
+                patch_path = patch_path[:-1]
+
+            shutil.make_archive(patch_path, 'zip', patch_path)
+            compressed_version_size = os.path.getsize(patch_path + ".zip")
 
     # Create JSON file and save all measurable stats within it
     print("Saving JSON-file with all relevant information as: stats.json")
