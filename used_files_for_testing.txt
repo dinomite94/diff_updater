@@ -1,0 +1,41 @@
+Experiment 1: Directories
+
+Different versions of a directory: 
+    Original version of the directory: pycharm-community-2018.1.6
+    Modified version of the directory: pycharm-community-2019.1.4
+
+Equal versions of a directory:
+    Original version of the directory: pycharm-community-2019.1.4
+    Modified version of the directory: pycharm-community-2019.1.4
+
+
+Experiment 2: Text files
+
+Different versions of a text file:
+    Original version had some kind of text
+    Modified version had modified text
+
+Equal versions of a text file:
+    Both versions contained the same text
+
+
+Experiment 3: Archives
+
+Different versions of archives:
+    Original version of the archive: pycharm-community-2018.1.6.tar.gz
+    Modified version of the archive: pycharm-community-2019.1.4.tar.gz
+
+Equal versions of archives:
+    Original version of the archive: pycharm-community-2018.1.6.tar.gz
+    Modified version of the archive: pycharm-community-2018.1.6.tar.gz
+
+
+Experiment 4: ISO files
+
+Different versions of ISO files:
+    Original version of the ISO file: debian-9.11.0-amd64-netinst.iso
+    Modified version of the ISO file: debian-10.1.0-amd64-netinst.iso
+
+Equal versions of ISO files:
+    Original version of the ISO file: debian-10.1.0-amd64-netinst.iso
+    Modified version of the ISO file: debian-10.1.0-amd64-netinst.iso

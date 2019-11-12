@@ -1,0 +1,9 @@
+{
+    "modified_size_vs_patch_size": "593493065 / 422050765 = 1.4062125085829427",
+    "size_of_the_compressed_version": "250315774 bytes",
+    "size_of_the_modified_version": "593493065 bytes",
+    "size_of_the_original_version": "557427163 bytes",
+    "size_of_the_patch_version": "422050765 bytes",
+    "time_needed_to_apply_patch_file": "19 seconds",
+    "time_needed_to_create_patch_file": "498 seconds"
+}

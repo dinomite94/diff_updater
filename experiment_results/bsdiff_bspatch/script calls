@@ -1,0 +1,115 @@
+DIRECTORY EXPERIMENTS: 
+    Experiment 1: Different directory versions NOT compressed
+    Creation Call: python3 /home/dino/Desktop/diff_updater/src/patch_file_creator.py -o "/home/dino/Desktop/experiments/1. directories/1. different versions/original_version/pycharm-community-2018.1.6" -m "/home/dino/Desktop/experiments/1. directories/1. different versions/modified_version/pycharm-community-2019.1.4" -p "/home/dino/Desktop/experiments/1. directories/1. different versions/without compression/patch_directory" -j "/home/dino/Desktop/experiments/1. directories/1. different versions/without compression/stats.json"
+
+    Apply Call:    python3 /home/dino/Desktop/diff_updater/src/patch_file_applier.py -o "/home/dino/Desktop/experiments/1. directories/1. different versions/original_version/pycharm-community-2018.1.6" -m "/home/dino/Desktop/experiments/1. directories/1. different versions/modified_version/pycharm-community-2019.1.4" -p "/home/dino/Desktop/experiments/1. directories/1. different versions/without compression/patch_directory" -j "/home/dino/Desktop/experiments/1. directories/1. different versions/without compression/stats.json"
+
+
+
+    Experiment 2: Different directory versions compressed
+    Creation Call: python3 /home/dino/Desktop/diff_updater/src/patch_file_creator.py -o "/home/dino/Desktop/experiments/1. directories/1. different versions/original_version/pycharm-community-2018.1.6" -m "/home/dino/Desktop/experiments/1. directories/1. different versions/modified_version/pycharm-community-2019.1.4" -p "/home/dino/Desktop/experiments/1. directories/1. different versions/with compression/patch_directory" -c -j "/home/dino/Desktop/experiments/1. directories/1. different versions/with compression/stats.json"
+
+    Apply Call:    python3 /home/dino/Desktop/diff_updater/src/patch_file_applier.py -o "/home/dino/Desktop/experiments/1. directories/1. different versions/original_version/pycharm-community-2018.1.6" -m "/home/dino/Desktop/experiments/1. directories/1. different versions/modified_version/pycharm-community-2019.1.4" -p "/home/dino/Desktop/experiments/1. directories/1. different versions/with compression/patch_directory" -c -j "/home/dino/Desktop/experiments/1. directories/1. different versions/with compression/stats.json"
+
+
+
+    Experiment 3: Equal directory versions NOT compressed
+    Creation Call: python3 /home/dino/Desktop/diff_updater/src/patch_file_creator.py -o "/home/dino/Desktop/experiments/1. directories/2. equal versions/original_version/pycharm-community-2019.1.4" -m "/home/dino/Desktop/experiments/1. directories/2. equal versions/modified_version/pycharm-community-2019.1.4" -p "/home/dino/Desktop/experiments/1. directories/2. equal versions/without compression/patch_directory" -j "/home/dino/Desktop/experiments/1. directories/2. equal versions/without compression/stats.json"
+
+    Apply Call:    python3 /home/dino/Desktop/diff_updater/src/patch_file_applier.py -o "/home/dino/Desktop/experiments/1. directories/2. equal versions/original_version/pycharm-community-2019.1.4" -m "/home/dino/Desktop/experiments/1. directories/2. equal versions/modified_version/pycharm-community-2019.1.4" -p "/home/dino/Desktop/experiments/1. directories/2. equal versions/without compression/patch_directory" -j "/home/dino/Desktop/experiments/1. directories/2. equal versions/without compression/stats.json"
+
+
+
+    Experiment 4: Equal directory versions compressed
+    Creation Call: python3 /home/dino/Desktop/diff_updater/src/patch_file_creator.py -o "/home/dino/Desktop/experiments/1. directories/2. equal versions/original_version/pycharm-community-2019.1.4" -m "/home/dino/Desktop/experiments/1. directories/2. equal versions/modified_version/pycharm-community-2019.1.4" -p "/home/dino/Desktop/experiments/1. directories/2. equal versions/with compression/patch_directory" -c -j "/home/dino/Desktop/experiments/1. directories/2. equal versions/with compression/stats.json"
+
+    Apply Call:    python3 /home/dino/Desktop/diff_updater/src/patch_file_applier.py -o "/home/dino/Desktop/experiments/1. directories/2. equal versions/original_version/pycharm-community-2019.1.4" -m "/home/dino/Desktop/experiments/1. directories/2. equal versions/modified_version/pycharm-community-2019.1.4" -p "/home/dino/Desktop/experiments/1. directories/2. equal versions/with compression/patch_directory" -c -j "/home/dino/Desktop/experiments/1. directories/2. equal versions/with compression/stats.json"
+
+
+
+TEXTFILE EXPERIMENTS:
+    Experiment 1: Different textfile versions NOT compressed
+    Creation Call: python3 /home/dino/Desktop/diff_updater/src/patch_file_creator.py -o "/home/dino/Desktop/experiments/2. text-files/1. different versions/original_version/text_file.txt" -m "/home/dino/Desktop/experiments/2. text-files/1. different versions/modified_version/text_file.txt" -p "/home/dino/Desktop/experiments/2. text-files/1. different versions/without compression/patch_file" -f -j "/home/dino/Desktop/experiments/2. text-files/1. different versions/without compression/stats.json"
+
+    Apply Call:    python3 /home/dino/Desktop/diff_updater/src/patch_file_applier.py -o "/home/dino/Desktop/experiments/2. text-files/1. different versions/original_version/text_file.txt" -m "/home/dino/Desktop/experiments/2. text-files/1. different versions/modified_version/text_file.txt" -p "/home/dino/Desktop/experiments/2. text-files/1. different versions/without compression/patch_file" -f -j "/home/dino/Desktop/experiments/2. text-files/1. different versions/without compression/stats.json"
+
+
+    
+    Experiment 2: Different textfile versions compressed
+    Creation Call: python3 /home/dino/Desktop/diff_updater/src/patch_file_creator.py -o "/home/dino/Desktop/experiments/2. text-files/1. different versions/original_version/text_file.txt" -m "/home/dino/Desktop/experiments/2. text-files/1. different versions/modified_version/text_file.txt" -p "/home/dino/Desktop/experiments/2. text-files/1. different versions/with compression/patch_file" -cf -j "/home/dino/Desktop/experiments/2. text-files/1. different versions/with compression/stats.json"
+
+    Apply Call:    python3 /home/dino/Desktop/diff_updater/src/patch_file_applier.py -o "/home/dino/Desktop/experiments/2. text-files/1. different versions/original_version/text_file.txt" -m "/home/dino/Desktop/experiments/2. text-files/1. different versions/modified_version/text_file.txt" -p "/home/dino/Desktop/experiments/2. text-files/1. different versions/with compression/patch_file" -cf -j "/home/dino/Desktop/experiments/2. text-files/1. different versions/with compression/stats.json"
+
+
+
+    Experiment 3: Equal textfile versions NOT compressed
+    Creation Call: python3 /home/dino/Desktop/diff_updater/src/patch_file_creator.py -o "/home/dino/Desktop/experiments/2. text-files/2. equal versions/original_version/text_file.txt" -m "/home/dino/Desktop/experiments/2. text-files/2. equal versions/modified_version/text_file.txt" -p "/home/dino/Desktop/experiments/2. text-files/2. equal versions/without compression/patch_file" -f -j "/home/dino/Desktop/experiments/2. text-files/2. equal versions/without compression/stats.json"
+
+    Apply Call:    python3 /home/dino/Desktop/diff_updater/src/patch_file_applier.py -o "/home/dino/Desktop/experiments/2. text-files/2. equal versions/original_version/text_file.txt" -m "/home/dino/Desktop/experiments/2. text-files/2. equal versions/modified_version/text_file.txt" -p "/home/dino/Desktop/experiments/2. text-files/2. equal versions/without compression/patch_file" -f -j "/home/dino/Desktop/experiments/2. text-files/2. equal versions/without compression/stats.json"
+
+
+
+    Experiment 4: Equal textfile versions compressed
+    Creation Call: python3 /home/dino/Desktop/diff_updater/src/patch_file_creator.py -o "/home/dino/Desktop/experiments/2. text-files/2. equal versions/original_version/text_file.txt" -m "/home/dino/Desktop/experiments/2. text-files/2. equal versions/modified_version/text_file.txt" -p "/home/dino/Desktop/experiments/2. text-files/2. equal versions/with compression/patch_file" -cf -j "/home/dino/Desktop/experiments/2. text-files/2. equal versions/with compression/stats.json"
+
+    Apply Call:    python3 /home/dino/Desktop/diff_updater/src/patch_file_applier.py -o "/home/dino/Desktop/experiments/2. text-files/2. equal versions/original_version/text_file.txt" -m "/home/dino/Desktop/experiments/2. text-files/2. equal versions/modified_version/text_file.txt" -p "/home/dino/Desktop/experiments/2. text-files/2. equal versions/with compression/patch_file" -cf -j "/home/dino/Desktop/experiments/2. text-files/2. equal versions/with compression/stats.json"
+
+
+
+ARCHIVE EXPERIMENTS:
+    Experiment 1: Different archive versions NOT compressed
+    Creation Call: python3 /home/dino/Desktop/diff_updater/src/patch_file_creator.py -o "/home/dino/Desktop/experiments/3. archives/1. different versions/original_version/pycharm-community-2018.1.6.tar.gz" -m "/home/dino/Desktop/experiments/3. archives/1. different versions/modified_version/pycharm-community-2019.1.4.tar.gz" -p "/home/dino/Desktop/experiments/3. archives/1. different versions/without compression/patch_file" -f -j "/home/dino/Desktop/experiments/3. archives/1. different versions/without compression/stats.json"
+
+    Apply Call:    python3 /home/dino/Desktop/diff_updater/src/patch_file_applier.py -o "/home/dino/Desktop/experiments/3. archives/1. different versions/original_version/pycharm-community-2018.1.6.tar.gz" -m "/home/dino/Desktop/experiments/3. archives/1. different versions/modified_version/pycharm-community-2019.1.4.tar.gz" -p "/home/dino/Desktop/experiments/3. archives/1. different versions/without compression/patch_file" -f -j "/home/dino/Desktop/experiments/3. archives/1. different versions/without compression/stats.json"
+
+
+    
+    Experiment 2: Different archive versions compressed
+    Creation Call: python3 /home/dino/Desktop/diff_updater/src/patch_file_creator.py -o "/home/dino/Desktop/experiments/3. archives/1. different versions/original_version/pycharm-community-2018.1.6.tar.gz" -m "/home/dino/Desktop/experiments/3. archives/1. different versions/modified_version/pycharm-community-2019.1.4.tar.gz" -p "/home/dino/Desktop/experiments/3. archives/1. different versions/with compression/patch_file" -cf -j "/home/dino/Desktop/experiments/3. archives/1. different versions/with compression/stats.json"
+
+    Apply Call:    python3 /home/dino/Desktop/diff_updater/src/patch_file_applier.py -o "/home/dino/Desktop/experiments/3. archives/1. different versions/original_version/pycharm-community-2018.1.6.tar.gz" -m "/home/dino/Desktop/experiments/3. archives/1. different versions/modified_version/pycharm-community-2019.1.4.tar.gz" -p "/home/dino/Desktop/experiments/3. archives/1. different versions/with compression/patch_file" -cf -j "/home/dino/Desktop/experiments/3. archives/1. different versions/with compression/stats.json"
+
+
+
+    Experiment 3: Equal archive versions NOT compressed
+    Creation Call: python3 /home/dino/Desktop/diff_updater/src/patch_file_creator.py -o "/home/dino/Desktop/experiments/3. archives/2. equal versions/original_version/pycharm-community-2018.1.6.tar.gz" -m "/home/dino/Desktop/experiments/3. archives/2. equal versions/modified_version/pycharm-community-2018.1.6.tar.gz" -p "/home/dino/Desktop/experiments/3. archives/2. equal versions/without compression/patch_file" -f -j "/home/dino/Desktop/experiments/3. archives/2. equal versions/without compression/stats.json"
+
+    Apply Call:    python3 /home/dino/Desktop/diff_updater/src/patch_file_applier.py -o "/home/dino/Desktop/experiments/3. archives/2. equal versions/original_version/pycharm-community-2018.1.6.tar.gz" -m "/home/dino/Desktop/experiments/3. archives/2. equal versions/modified_version/pycharm-community-2018.1.6.tar.gz" -p "/home/dino/Desktop/experiments/3. archives/2. equal versions/without compression/patch_file" -f -j "/home/dino/Desktop/experiments/3. archives/2. equal versions/without compression/stats.json"
+
+
+
+    Experiment 4: Equal archive versions compressed
+    Creation Call: python3 /home/dino/Desktop/diff_updater/src/patch_file_creator.py -o "/home/dino/Desktop/experiments/3. archives/2. equal versions/original_version/pycharm-community-2018.1.6.tar.gz" -m "/home/dino/Desktop/experiments/3. archives/2. equal versions/modified_version/pycharm-community-2018.1.6.tar.gz" -p "/home/dino/Desktop/experiments/3. archives/2. equal versions/with compression/patch_file" -cf -j "/home/dino/Desktop/experiments/3. archives/2. equal versions/with compression/stats.json"
+
+    Apply Call:    python3 /home/dino/Desktop/diff_updater/src/patch_file_applier.py -o "/home/dino/Desktop/experiments/3. archives/2. equal versions/original_version/pycharm-community-2018.1.6.tar.gz" -m "/home/dino/Desktop/experiments/3. archives/2. equal versions/modified_version/pycharm-community-2018.1.6.tar.gz" -p "/home/dino/Desktop/experiments/3. archives/2. equal versions/with compression/patch_file" -cf -j "/home/dino/Desktop/experiments/3. archives/2. equal versions/with compression/stats.json"
+
+
+
+ISO EXPERIMENTS:
+    Experiment 1: Different ISO-versions NOT compressed
+    Creation Call: python3 /home/dino/Desktop/diff_updater/src/patch_file_creator.py -o "/home/dino/Desktop/experiments/4. isos/1. different versions/original_version/debian-9.11.0-amd64-netinst.iso" -m "/home/dino/Desktop/experiments/4. isos/1. different versions/modified_version/debian-10.1.0-amd64-netinst.iso" -p "/home/dino/Desktop/experiments/4. isos/1. different versions/without compression/patch_file" -f -j "/home/dino/Desktop/experiments/4. isos/1. different versions/without compression/stats.json"
+
+    Apply Call:    python3 /home/dino/Desktop/diff_updater/src/patch_file_applier.py -o "/home/dino/Desktop/experiments/4. isos/1. different versions/original_version/debian-9.11.0-amd64-netinst.iso" -m "/home/dino/Desktop/experiments/4. isos/1. different versions/modified_version/debian-10.1.0-amd64-netinst.iso" -p "/home/dino/Desktop/experiments/4. isos/1. different versions/without compression/patch_file" -f -j "/home/dino/Desktop/experiments/4. isos/1. different versions/without compression/stats.json"
+
+
+    
+    Experiment 2: Different ISO-versions compressed
+    Creation Call: python3 /home/dino/Desktop/diff_updater/src/patch_file_creator.py -o "/home/dino/Desktop/experiments/4. isos/1. different versions/original_version/debian-9.11.0-amd64-netinst.iso" -m "/home/dino/Desktop/experiments/4. isos/1. different versions/modified_version/debian-10.1.0-amd64-netinst.iso" -p "/home/dino/Desktop/experiments/4. isos/1. different versions/with compression/patch_file" -cf -j "/home/dino/Desktop/experiments/4. isos/1. different versions/with compression/stats.json"
+
+    Apply Call:    python3 /home/dino/Desktop/diff_updater/src/patch_file_applier.py -o "/home/dino/Desktop/experiments/4. isos/1. different versions/original_version/debian-9.11.0-amd64-netinst.iso" -m "/home/dino/Desktop/experiments/4. isos/1. different versions/modified_version/debian-10.1.0-amd64-netinst.iso" -p "/home/dino/Desktop/experiments/4. isos/1. different versions/with compression/patch_file" -cf -j "/home/dino/Desktop/experiments/4. isos/1. different versions/with compression/stats.json"
+
+
+
+    Experiment 3: Equal ISO-versions NOT compressed
+    Creation Call: python3 /home/dino/Desktop/diff_updater/src/patch_file_creator.py -o "/home/dino/Desktop/experiments/4. isos/2. equal versions/original_version/debian-10.1.0-amd64-netinst.iso" -m "/home/dino/Desktop/experiments/4. isos/2. equal versions/modified_version/debian-10.1.0-amd64-netinst.iso" -p "/home/dino/Desktop/experiments/4. isos/2. equal versions/without compression/patch_file" -f -j "/home/dino/Desktop/experiments/4. isos/2. equal versions/without compression/stats.json"
+
+    Apply Call:    python3 /home/dino/Desktop/diff_updater/src/patch_file_applier.py -o "/home/dino/Desktop/experiments/4. isos/2. equal versions/original_version/debian-10.1.0-amd64-netinst.iso" -m "/home/dino/Desktop/experiments/4. isos/2. equal versions/modified_version/debian-10.1.0-amd64-netinst.iso" -p "/home/dino/Desktop/experiments/4. isos/2. equal versions/without compression/patch_file" -f -j "/home/dino/Desktop/experiments/4. isos/2. equal versions/without compression/stats.json"
+
+
+
+    Experiment 4: Equal ISO-versions compressed
+    Creation Call: python3 /home/dino/Desktop/diff_updater/src/patch_file_creator.py -o "/home/dino/Desktop/experiments/4. isos/2. equal versions/original_version/debian-10.1.0-amd64-netinst.iso" -m "/home/dino/Desktop/experiments/4. isos/2. equal versions/modified_version/debian-10.1.0-amd64-netinst.iso" -p "/home/dino/Desktop/experiments/4. isos/2. equal versions/with compression/patch_file" -cf -j "/home/dino/Desktop/experiments/4. isos/2. equal versions/with compression/stats.json"
+
+    Apply Call:    python3 /home/dino/Desktop/diff_updater/src/patch_file_applier.py -o "/home/dino/Desktop/experiments/4. isos/2. equal versions/original_version/debian-10.1.0-amd64-netinst.iso" -m "/home/dino/Desktop/experiments/4. isos/2. equal versions/modified_version/debian-10.1.0-amd64-netinst.iso" -p "/home/dino/Desktop/experiments/4. isos/2. equal versions/with compression/patch_file" -cf -j "/home/dino/Desktop/experiments/4. isos/2. equal versions/with compression/stats.json"
+
+
