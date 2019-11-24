@@ -7,7 +7,7 @@ import subprocess
 import time
 
 
-supported_tools = ["diff", "bsdiff", "xdelta", "rsync"]
+supported_tools = ["bsdiff", "xdelta", "rsync"]
 
 
 def save_new_modified_and_deleted_file_lists(new_files, modified_files, deleted_files, patch_path):
@@ -32,7 +32,7 @@ def save_new_modified_and_deleted_file_lists(new_files, modified_files, deleted_
 
 def calculate_directory_size(dir_path):
     size = 0
-    for root, dir, files in os.walk(dir_path):
+    for root, _, files in os.walk(dir_path):
         for file in files:
             size += os.path.getsize(root + "/" + file)
 
@@ -61,7 +61,7 @@ def retrieve_needed_information(original_version_path, modified_version_path, pa
 
 
 def create_patch_directory_structure(modified_directory, patch_directory):
-    for root, dirs, _ in os.walk(modified_directory):
+    for root, _, _ in os.walk(modified_directory):
         root = root.replace(modified_directory, "")
         if not os.path.exists(patch_directory + "/" + root):
             path = patch_directory + "/" + root + "/"
@@ -91,12 +91,8 @@ def create_diff_files(file_list, original_version_path, modified_version_path, p
                 print("Patch for {} failed. Adding this file to the list!".format(file[0]))
                 files_with_failed_patches.append(file)
         elif diff_tool == "xdelta":
-            pass
-        elif diff_tool == "diff":
-            pass
+            result = subprocess.call(["xdelta3", "-s", original_version_file, modified_version_file, patch_file])
         elif diff_tool == "rsync":
-            pass
-        else:
             pass
 
     return files_with_failed_patches
@@ -157,7 +153,7 @@ def detect_all_new_modified_and_deleted_files(original_version_file_list, modifi
 
 def iterate_through_directory(directory_path):
     file_list = []
-    for root, dirs, files in os.walk(directory_path):
+    for root, _, files in os.walk(directory_path):
         # Strip away the directory_path which is not needed for reconstructing the directory structure
         root = root.replace(directory_path, "")
         for file in files:

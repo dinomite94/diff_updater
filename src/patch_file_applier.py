@@ -7,7 +7,7 @@ import shutil
 import subprocess
 import zipfile
 
-supported_tools = ["bspatch", "diff", "xdelta", "rsync"]
+supported_tools = ["bspatch", "xdelta", "rsync"]
 
 
 def is_path_valid(path_to_check):
@@ -90,8 +90,13 @@ def update_original_directory(modified_files, original_version_path, patch_path,
     for file in modified_files:
         modified_file_path = original_version_path + "/" + file
         patch_file_path = patch_path + "/" + file
-
-        return_value = subprocess.call(["bspatch", modified_file_path, modified_file_path, patch_file_path])
+        
+        return_value = 0
+        if tool == "bspatch":
+            return_value = subprocess.call(["bspatch", modified_file_path, modified_file_path, patch_file_path])
+        elif tool == "xdelta":
+            return_value = subprocess.call(["xdelta3", "-fd", "-s",modified_file_path, patch_file_path, modified_file_path])        
+        
         if return_value > 0:
             print("Patch failed for the following file: {}".format(modified_file_path))
             failed_patches.append(modified_file_path)
@@ -181,7 +186,8 @@ def move_files_to_original_version(new_files, original_version_path, patch_path)
 
 
 def apply_single_patch_file(original_version_path, modified_version_path, patch_path, tool):
-    #TODO: Implement patch applying for all other tools
+    #TODO: ADD implementation for xdelta3
+    # Subprocess call for xdelta3: xdelta3 -fd -s OLD, PATCHFILE, LOCATION_WHERE_TO_SAVE_FILE(location of old file)
     subprocess.call([tool, original_version_path, modified_version_path, patch_path])
 
 
