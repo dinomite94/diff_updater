@@ -92,8 +92,11 @@ def create_diff_files(file_list, original_version_path, modified_version_path, p
                 files_with_failed_patches.append(file)
         elif diff_tool == "xdelta":
             result = subprocess.call(["xdelta3", "-s", original_version_file, modified_version_file, patch_file])
+            if result > 0:
+                print("Patch for {} failed. Adding this file to the list!".format(file[0]))
+                files_with_failed_patches.append(file)
         elif diff_tool == "rsync":
-            pass
+            result = subprocess.call(["rsync", "-zvh", original_version_file, modified_version_file])
 
     return files_with_failed_patches
 

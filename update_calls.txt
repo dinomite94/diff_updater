@@ -1,0 +1,5 @@
+XDelta3:
+    Patch file creation call: xdelta3 -s [OLD VERSION] [NEW VERSION] [PATCH VERSION]
+    Patch file applying call: xdelta3 -fd -s [OLD VERSION] [NEW VERSION] [PATCH VERSION]
+RSync:
+rsync -zavh --delete [NEW VERSION] [OLD VERSION]
